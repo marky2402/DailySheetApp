@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+    <title>DailySheet</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      rel="preconnect"
+      href="https://fonts.gstatic.com"
+      crossorigin
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="main.css" />
+
+    <script
+      src="https://kit.fontawesome.com/f2c4e71c3b.js"
+      crossorigin="anonymous"
+    ></script>
+
+    <!-- <script defer src="./main.js"></script> -->
+    <script type="module" src="./main.js"></script>
+  </head>
+  <body>
+    <header class="header">
+      <h1 class="main--title">DailySheet Selector</h1>
+      <div class="date--selector">
+        <label for="datepicker">Pick a date: </label>
+        <input
+          type="date"
+          id="datepicker"
+          min="2024-07-19"
+          max="2024-12-31"
+        />
+        <button class="submit--date">Submit</button>
+      </div>
+    </header>
+    <main class="main--container">
+      <p class="dailysheet--title">
+        Daily Sheet for: <span class="dailysheet--date"></span>
+      </p>
+      <div class="container">
+        <section class="dailysheet--container">
+          <div class="toggle--switch-container">
+            <p>Allocate Spares</p>
+            <label class="switch">
+              <input type="checkbox" />
+              <span class="slider round"></span
+            ></label>
+          </div>
+          <div class="dailysheet--content">
+            <div class="dailysheet--heading heading--driver">
+              Driver:
+            </div>
+            <div class="dailysheet--heading heading--bookon">
+              Book-on:
+            </div>
+            <div class="dailysheet--heading heading--bookoff">
+              Book-off:
+            </div>
+            <div class="dailysheet--heading heading--job">Job:</div>
+          </div>
+        </section>
+        <!-- add 'slide--container--extra' to class below in javascript when needed to convert to a carousel -->
+        <section class="weekly--leave-container">
+          <!-- add the div element below i.e. 'slide--extra slide--1--extra' and add 'weelkly--leave-title-container-1' and 'weekly--leave-list--1' as it's child elements and then remove the weekly--leave-hidden class in javascript when needed to convert to a carousel -->
+
+          <!-- <div class="slide--extra slide--1--extra"> -->
+          <div
+            class="weekly--leave-title-container weekly--leave-title-container-1"
+          >
+            <p class="weekly--leave-title">
+              Weekly Leave for week commencing:
+              <span
+                class="weekly--leave-date weekly--leave-date--1"
+              ></span>
+            </p>
+            <button class="show-modal" data-target="weekly-leave">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="add--user-icon"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"
+                /></svg
+              ><i class="fa-solid fa-plus-minus"></i>
+            </button>
+          </div>
+          <ul class="weekly--leave-list weekly--leave-list--1">
+            <li class="weekly--leave-item"></li>
+            <li class="weekly--leave-item"></li>
+            <li class="weekly--leave-item"></li>
+            <li class="weekly--leave-item"></li>
+          </ul>
+          <!-- </div> -->
+
+          <div
+            class="slide--extra slide--2--extra weekly--leave-hidden"
+          >
+            <div class="weekly--leave-title-container">
+              <p class="weekly--leave-title">
+                Weekly Leave for week commencing:
+                <span
+                  class="weekly--leave-date weekly--leave-date--2"
+                ></span>
+              </p>
+              <button class="show-modal" data-target="weekly-leave">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  class="add--user-icon"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"
+                  /></svg
+                ><i class="fa-solid fa-plus-minus"></i>
+              </button>
+            </div>
+            <ul class="weekly--leave-list weekly--leave-list--2">
+              <li class="weekly--leave-item"></li>
+              <li class="weekly--leave-item"></li>
+              <li class="weekly--leave-item"></li>
+              <li class="weekly--leave-item"></li>
+            </ul>
+          </div>
+
+          <button
+            class="slider__btn--extra slider__btn--left--extra weekly--leave-hidden"
+          >
+            &#8249;
+          </button>
+          <button
+            class="slider__btn--extra slider__btn--right--extra weekly--leave-hidden"
+          >
+            &#8250;
+          </button>
+        </section>
+
+        <section class="unavailable--container slide--container">
+          <div class="slide slide--1">
+            <div class="unavailable--title-container">
+              <p class="unavailable--title">
+                Unavailable for:
+                <span class="dailysheet--date--before"></span>
+              </p>
+              <button class="show-modal" data-target="unavailable">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  class="add--user-icon"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"
+                  /></svg
+                ><i class="fa-solid fa-plus-minus"></i>
+              </button>
+            </div>
+            <ul class="unavailable--list unavailable--list--1">
+              <li class="unavailable--item">GIBSON</li>
+              <li class="unavailable--item">MORRISH</li>
+              <li class="unavailable--item">STOCKS</li>
+              <li class="unavailable--item">YATES</li>
+              <li class="unavailable--item">YOUNG</li>
+            </ul>
+          </div>
+          <div class="slide slide--2">
+            <div class="unavailable--title-container">
+              <p class="unavailable--title">
+                Unavailable for:
+                <span class="dailysheet--date"></span>
+              </p>
+              <button class="show-modal" data-target="unavailable">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  class="add--user-icon"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"
+                  /></svg
+                ><i class="fa-solid fa-plus-minus"></i>
+              </button>
+            </div>
+            <ul class="unavailable--list unavailable--list--2">
+              <li class="unavailable--item">GIBSON</li>
+              <li class="unavailable--item">MORRISH</li>
+              <li class="unavailable--item">STOCKS</li>
+              <li class="unavailable--item">YATES</li>
+              <li class="unavailable--item">YOUNG</li>
+            </ul>
+          </div>
+          <div class="slide slide--3">
+            <div class="unavailable--title-container">
+              <p class="unavailable--title">
+                Unavailable for:
+                <span class="dailysheet--date--after"></span>
+              </p>
+              <button class="show-modal" data-target="unavailable">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  class="add--user-icon"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"
+                  /></svg
+                ><i class="fa-solid fa-plus-minus"></i>
+              </button>
+            </div>
+            <ul class="unavailable--list unavailable--list--3">
+              <li class="unavailable--item">GIBSON</li>
+              <li class="unavailable--item">MORRISH</li>
+              <li class="unavailable--item">STOCKS</li>
+              <li class="unavailable--item">YATES</li>
+              <li class="unavailable--item">YOUNG</li>
+            </ul>
+          </div>
+          <!-- 
+          <button class="slider__btn slider__btn--left">&larr;</button>
+          <button class="slider__btn slider__btn--right">&rarr;</button>
+          -->
+          <button class="slider__btn slider__btn--left">
+            &#8249;
+          </button>
+          <button class="slider__btn slider__btn--right">
+            &#8250;
+          </button>
+        </section>
+      </div>
+      <section class="modal hidden">
+        <button class="close-modal">&times;</button>
+        <h1>Add or Remove Driver:</h1>
+        <ul class="driver--list-modal">
+          <li>
+            <p>AKERS</p>
+            <div><button>Add</button><button>Remove</button></div>
+          </li>
+          <li>
+            <p>BAKER</p>
+            <div><button>Add</button><button>Remove</button></div>
+          </li>
+          <li>
+            <p>BELL</p>
+            <div><button>Add</button><button>Remove</button></div>
+          </li>
+          <li>
+            <p>BLACKLOCK</p>
+            <div><button>Add</button><button>Remove</button></div>
+          </li>
+          <li>
+            <p>BLAIR</p>
+            <div><button>Add</button><button>Remove</button></div>
+          </li>
+          <li>
+            <p>BUTTERWORTH</p>
+            <div><button>Add</button><button>Remove</button></div>
+          </li>
+          <li>
+            <p>CAMBRIDGE</p>
+            <div><button>Add</button><button>Remove</button></div>
+          </li>
+          <li>
+            <p>COLLIER</p>
+            <div><button>Add</button><button>Remove</button></div>
+          </li>
+          <li>
+            <p>EDWARDS</p>
+            <div><button>Add</button><button>Remove</button></div>
+          </li>
+          <li>
+            <p>FLECK</p>
+            <div><button>Add</button><button>Remove</button></div>
+          </li>
+          <li>
+            <p>FOX</p>
+            <div><button>Add</button><button>Remove</button></div>
+          </li>
+          <li>
+            <p>GALE</p>
+            <div><button>Add</button><button>Remove</button></div>
+          </li>
+          <li>
+            <p>GIBSON</p>
+            <div><button>Add</button><button>Remove</button></div>
+          </li>
+          <li>
+            <p>GORGE</p>
+            <div><button>Add</button><button>Remove</button></div>
+          </li>
+          <li>
+            <p>GRESSWELL</p>
+            <div><button>Add</button><button>Remove</button></div>
+          </li>
+          <li>
+            <p>HOLMES</p>
+            <div><button>Add</button><button>Remove</button></div>
+          </li>
+          <li>
+            <p>HOWARD</p>
+            <div><button>Add</button><button>Remove</button></div>
+          </li>
+          <li>
+            <p>HUNTLEY</p>
+            <div><button>Add</button><button>Remove</button></div>
+          </li>
+          <li>
+            <p>JAMES</p>
+            <div><button>Add</button><button>Remove</button></div>
+          </li>
+          <li>
+            <p>KEEGANS</p>
+            <div><button>Add</button><button>Remove</button></div>
+          </li>
+          <li>
+            <p>MATHIESON</p>
+            <div><button>Add</button><button>Remove</button></div>
+          </li>
+          <li>
+            <p>MORRISH</p>
+            <div><button>Add</button><button>Remove</button></div>
+          </li>
+          <li>
+            <p>POTTER</p>
+            <div><button>Add</button><button>Remove</button></div>
+          </li>
+          <li>
+            <p>PERRY</p>
+            <div><button>Add</button><button>Remove</button></div>
+          </li>
+          <li>
+            <p>REYNOLDS/PIPER</p>
+            <div><button>Add</button><button>Remove</button></div>
+          </li>
+          <li>
+            <p>SHEPPARD</p>
+            <div><button>Add</button><button>Remove</button></div>
+          </li>
+          <li>
+            <p>STOCKS</p>
+            <div><button>Add</button><button>Remove</button></div>
+          </li>
+          <li>
+            <p>STREETER</p>
+            <div><button>Add</button><button>Remove</button></div>
+          </li>
+          <li>
+            <p>STRINGER</p>
+            <div><button>Add</button><button>Remove</button></div>
+          </li>
+          <li>
+            <p>TURNER</p>
+            <div><button>Add</button><button>Remove</button></div>
+          </li>
+          <li>
+            <p>WOOD</p>
+            <div><button>Add</button><button>Remove</button></div>
+          </li>
+          <li>
+            <p>YOUNG</p>
+            <div><button>Add</button><button>Remove</button></div>
+          </li>
+          <li>
+            <p>YATES</p>
+            <div><button>Add</button><button>Remove</button></div>
+          </li>
+        </ul>
+      </section>
+    </main>
+    <div class="overlay hidden"></div>
+  </body>
+</html>

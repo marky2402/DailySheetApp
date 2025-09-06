@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+    <title>Document</title>
+  </head>
+  <body>
+    <input
+      type="file"
+      class="input--1"
+      name="upload_excel"
+      id="myFile"
+    />
+    <button class="btn" type="button" id="upload-btn">Upload</button>
+
+    <!-- use version 0.20.2 -->
+    <script
+      lang="javascript"
+      src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"
+    ></script>
+
+    <!-- <script
+    src="https://cdn.jsdelivr.net/npm/xlsx@0.16.8/dist/xlsx.full.min.js"
+    integrity="sha256-Ic7HP804IrYks4vUqX1trFF1Nr33RjONeJESZnYxsOY="
+    crossorigin="anonymous"
+    >
+    </script> -->
+    <script
+      type="module"
+      src="./createJSONfromSpreadsheet.js"
+    ></script>
+  </body>
+</html>

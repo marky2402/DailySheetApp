@@ -3,7 +3,7 @@
 const fs = require('fs');
 const XLSX = require('xlsx');
 
-const wb = XLSX.readFile('./CUD_WL_2025.xlsx', {
+const wb = XLSX.readFile('./CUD_WL_2026.xlsx', {
   type: 'binary',
   cellNF: true,
   cellDates: true,
@@ -37,5 +37,5 @@ fs.writeFile(
 
     // Success
     console.log('Done writing');
-  }
+  },
 );

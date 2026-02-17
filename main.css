@@ -38,7 +38,7 @@ html {
 }
 
 body {
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
   line-height: 1.5;
   color: var(--font-colour1);
   background-color: var(--primary-colour);
@@ -84,12 +84,21 @@ body {
   }
 }
 
-input[type='date'] {
+/* Flatpickr input styling - targets the visible input created by Flatpickr */
+.date--selector input.flatpickr-input,
+.date--selector input.form-control {
   padding: 0.5rem 1rem;
   border: 2px solid var(--secondary-colour);
-  background-color: var(--tertiary-colour);
+  background-color: white;
   color: black;
   border-radius: 4px;
+}
+
+.date--selector input.flatpickr-input:focus,
+.date--selector input.form-control:focus {
+  outline: none;
+  border-color: var(--secondary-colour);
+  box-shadow: 0 0 0 3px rgba(56, 182, 64, 0.2);
 }
 
 .submit--date {
@@ -207,7 +216,7 @@ input[type='date'] {
 
 .slider:before {
   position: absolute;
-  content: '';
+  content: "";
   height: 26px;
   width: 26px;
   left: 4px;

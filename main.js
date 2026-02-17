@@ -15,20 +15,23 @@ const datePicker = document.querySelector("#datepicker");
 const selectedDate = document.querySelector(".submit--date");
 const allocateSparesCheckBox = document.querySelector('input[type="checkbox"]');
 const dailySheetContent = document.querySelector(".dailysheet--content");
+
+// Initialize Flatpickr
+let flatpickrInstance;
 // const weeklyLeaveDate1 = document.querySelector(".weekly--leave-date--1");
 // const weeklyLeaveDate2 = document.querySelector(".weekly--leave-date--2");
 // a live HTMLCollection of all the weekly leave list elements
 // const weeklyLeaveList = document.getElementsByClassName("weekly--leave-list");
 const dailySheetDateHTML = document.querySelectorAll(".dailysheet--date");
 const dailySheetDateBeforeHTML = document.querySelector(
-  ".dailysheet--date--before"
+  ".dailysheet--date--before",
 );
 const dailySheetDateAfterHTML = document.querySelector(
-  ".dailysheet--date--after"
+  ".dailysheet--date--after",
 );
 // a live node list
 const weeklyLeaveContainer = document.getElementsByClassName(
-  "weekly--leave-container"
+  "weekly--leave-container",
 );
 const modal = document.querySelector(".modal");
 const overlay = document.querySelector(".overlay");
@@ -142,13 +145,25 @@ const parseDateObjectToString = (dateOject, seperator = "-") => {
 const setUpDatePicker = (daysAhead = 1) => {
   const min = new Date(Date.now()); // today's date
   const max = new Date(min); // create a copy
-  // set 8 days ahead of current date
+  // set 1 day ahead of current date
   min.setUTCDate(min.getUTCDate() + daysAhead);
-  max.setUTCFullYear(max.getUTCFullYear(), 11, 31); // 31/12/2024
+  max.setUTCFullYear(max.getUTCFullYear(), 11, 31); // 31/12/2026
   const minDateStr = parseDateObjectToString(min);
-  datePicker.value = minDateStr;
-  datePicker.min = minDateStr;
-  datePicker.max = parseDateObjectToString(max);
+
+  // Initialize Flatpickr with configuration
+  flatpickrInstance = flatpickr(datePicker, {
+    altInput: true,
+    altFormat: "D, j M Y",
+    dateFormat: "Y-m-d",
+    defaultDate: minDateStr,
+    minDate: minDateStr,
+    maxDate: parseDateObjectToString(max),
+    // Optional: Add a change event handler
+    onChange: function (selectedDates, dateStr, instance) {
+      // The date has been selected via flatpickr
+      console.log("Date selected:", dateStr);
+    },
+  });
 };
 
 const grabDateFromDatePicker = () => {
@@ -295,7 +310,7 @@ const displayDailySheet = (finalDailySheetObj) => {
   // in the form 'DD/MM/YY'.
   for (const el of dailySheetDateHTML)
     el.textContent = `${DailySheet.dateGB.format(
-      finalDailySheetObj.dailySheetDateObj
+      finalDailySheetObj.dailySheetDateObj,
     )}`;
 
   // remove all previous rows, but not the header
@@ -340,10 +355,10 @@ const displayExtraWeeklyLeaveSlide = function () {
   nextBtn = slidesContainer.querySelector(".slider__btn--right--extra");
 
   const weeklyLeaveTitleContainer1 = slidesContainer.querySelector(
-    ".weekly--leave-title-container-1"
+    ".weekly--leave-title-container-1",
   );
   const weeklyLeaveList1 = slidesContainer.querySelector(
-    ".weekly--leave-list--1"
+    ".weekly--leave-list--1",
   );
 
   const slide2 = slidesContainer.querySelector(".slide--2--extra");
@@ -450,15 +465,15 @@ const calculateDailySheet = function () {
     Date.UTC(
       dailySheetDate.getUTCFullYear(),
       dailySheetDate.getUTCMonth(),
-      dailySheetDate.getUTCDate() - 1
-    )
+      dailySheetDate.getUTCDate() - 1,
+    ),
   );
   const nextDay = new Date(
     Date.UTC(
       dailySheetDate.getUTCFullYear(),
       dailySheetDate.getUTCMonth(),
-      dailySheetDate.getUTCDate() + 1
-    )
+      dailySheetDate.getUTCDate() + 1,
+    ),
   );
   prevDailySheetObj.initialiseWeeklyLeave(prevDay);
   nextDailySheetObj.initialiseWeeklyLeave(nextDay);
@@ -485,10 +500,10 @@ const calculateDailySheet = function () {
   // display date on web page for unavailable drivers list,
   // day before and after the current dailysheet date, i.e. slides 1 and 3
   dailySheetDateBeforeHTML.textContent = DailySheet.dateGB.format(
-    prevDailySheetObj.dailySheetDateObj
+    prevDailySheetObj.dailySheetDateObj,
   );
   dailySheetDateAfterHTML.textContent = DailySheet.dateGB.format(
-    nextDailySheetObj.dailySheetDateObj
+    nextDailySheetObj.dailySheetDateObj,
   );
 
   updateWeeklyLeaveDisplay();
@@ -526,7 +541,7 @@ const recalculateDailySheet1 = function () {
       absentDrivers = [...new Set(absentDrivers)];
 
       console.log(
-        `Absent Drivers: ${absentDrivers} for ${dailySheetObj.dailySheetDateObj}`
+        `Absent Drivers: ${absentDrivers} for ${dailySheetObj.dailySheetDateObj}`,
       );
 
       // amend daily sheet to reflect absent or unavailable drivers
@@ -548,7 +563,7 @@ const recalculateDailySheet1 = function () {
 
       // display current amended daily sheet on page
       if (i === 2) displayDailySheet(dailySheetObj);
-    }
+    },
   );
 };
 
@@ -659,7 +674,7 @@ const editUnavailableDrivers = function (event) {
         // remove driver from array
         dailySheetLeaveArr.splice(
           dailySheetLeaveArr.indexOf(DriverToAddOrRemove),
-          1
+          1,
         );
       }
     }
@@ -870,7 +885,7 @@ const slider = function () {
   // Functions
   const goToSlide = function (slide) {
     slides.forEach(
-      (s, i) => (s.style.transform = `translateX(${100 * (i - slide)}%)`)
+      (s, i) => (s.style.transform = `translateX(${100 * (i - slide)}%)`),
     );
   };
 

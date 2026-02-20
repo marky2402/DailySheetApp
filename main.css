@@ -583,6 +583,21 @@ input:checked + .slider:before {
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.driver--list-modal li button:hover {
+  background-color: #099268;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(8, 127, 91, 0.3);
+}
+
+.driver--list-modal li button:active {
+  background-color: #0ca678;
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(8, 127, 91, 0.4);
+  outline: 3px solid rgba(8, 127, 91, 0.4);
 }
 
 .overlay {

@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 import weeklyLeave from './weeklyleave.json' with { type: 'json' };
 // import { weeklyLeave } from './data.js';
@@ -12,12 +12,16 @@ class UnavailableDrivers {
   get weeklyLeaveArray() {
     if (this.weekCommencingStr in weeklyLeave)
       // Reformat drivers names i.e. convert from S Perry to PERRY.
-      return weeklyLeave[this.weekCommencingStr].map((el) =>
-        el.split(" ")[1].toUpperCase()
-      );
+      return weeklyLeave[this.weekCommencingStr]
+        .map(el => el.split(' ')[1].toUpperCase())
+        .map(drv =>
+          drv === 'PIPER' || drv === 'REYNOLDS'
+            ? "REY'DS/PIPER"
+            : drv,
+        );
     else
       throw new Error(
-        `Invalid week commencing date: ${this.weekCommencingStr}`
+        `Invalid week commencing date: ${this.weekCommencingStr}`,
       );
   }
 }

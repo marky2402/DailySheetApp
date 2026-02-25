@@ -38,7 +38,7 @@ html {
 }
 
 body {
-  font-family: "Inter", sans-serif;
+  font-family: 'Inter', sans-serif;
   line-height: 1.5;
   color: var(--font-colour1);
   background-color: var(--primary-colour);
@@ -216,7 +216,7 @@ body {
 
 .slider:before {
   position: absolute;
-  content: "";
+  content: '';
   height: 26px;
   width: 26px;
   left: 4px;
@@ -271,6 +271,11 @@ input:checked + .slider:before {
 
 .dailysheet--item {
   line-height: 1.6;
+}
+
+/* driver name in daily sheet should match list font size */
+.dailysheet--item {
+  font-size: 1.2rem;
 }
 
 .weekly--leave-container {

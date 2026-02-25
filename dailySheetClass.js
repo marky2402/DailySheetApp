@@ -1,7 +1,7 @@
-"use strict";
+'use strict';
 ////////////////////////////// TEST //////////////////////////////////////
-import { drivers, fullRoster, linkStartDate } from "./data.js";
-import UnavailableDrivers from "./unavailableDriversClass.js";
+import { drivers, fullRoster, linkStartDate } from './data.js';
+import UnavailableDrivers from './unavailableDriversClass.js';
 ////////////////////////////// TEST //////////////////////////////////////
 
 class DailySheet {
@@ -24,7 +24,8 @@ class DailySheet {
 
     const linkStartDateObj = DailySheet.parseStrToDate(linkStartDate);
 
-    let k = (dateObjToRotateBy - linkStartDateObj) / (1000 * 3600 * 24 * 7);
+    let k =
+      (dateObjToRotateBy - linkStartDateObj) / (1000 * 3600 * 24 * 7);
 
     k = k % arr.length; // In case k is larger than array length
     return arr.slice(-k).concat(arr.slice(0, -k));
@@ -33,17 +34,17 @@ class DailySheet {
   initialiseWeeklyLeave(dailySheetDateObj) {
     this.dailySheetDateObj = dailySheetDateObj;
     this.weekCommencingDateObj = DailySheet.getWeekCommencing(
-      this.dailySheetDateObj
+      this.dailySheetDateObj,
     );
 
     //////////////  TEST  //////////////////
     // Get week commencing date in string format 'dd/mm/yy'
     this.weekCommencingDateStr = DailySheet.dateGB.format(
-      this.weekCommencingDateObj
+      this.weekCommencingDateObj,
     );
 
     this.weeklyLeaveArr = new UnavailableDrivers(
-      this.weekCommencingDateStr
+      this.weekCommencingDateStr,
     ).weeklyLeaveArray;
     //////////////  TEST  //////////////////
   }
@@ -56,24 +57,27 @@ class DailySheet {
 
     this.rotatedDriversArr = this.rotateArray(
       DailySheet.unrotatedDriversArr,
-      this.weekCommencingDateObj
+      this.weekCommencingDateObj,
     );
 
     const index = this.dailySheetDateObj.getUTCDay();
     this.dailySheet = DailySheet.roster
       .map((row, i) => [this.rotatedDriversArr[i], row[index]])
-      .filter((el) => el[1] !== "RD");
+      .filter(el => el[1] !== 'RD');
 
     //////////////  TEST  //////////////////
 
     // clone each job object of dailysheet so that the original job object in
     // DailySheet.roster (i.e. fullRoster) is unchanged
-    this.dailySheet.map((row) => [row[0], row[1].clone()]);
+    this.dailySheet = this.dailySheet.map(row => [
+      row[0],
+      row[1].clone(),
+    ]);
 
     //////////////  TEST  //////////////////
 
-    this.dailySheet.forEach((row) =>
-      row[1].setStartDate(this.dailySheetDateObj)
+    this.dailySheet.forEach(row =>
+      row[1].setStartDate(this.dailySheetDateObj),
     );
     this.dailySheet.sort(this.#compareFn);
 
@@ -81,7 +85,7 @@ class DailySheet {
     console.log(`Create DailySheet for ${this.dailySheetDateObj}:\n`);
     for (const [driv, job] of this.dailySheet)
       console.log(`${driv} => ${job.start} - ${job.end}, ${job.job}`);
-    console.log("\n");
+    console.log('\n');
     //////////////  TEST  //////////////////
   }
 
@@ -104,9 +108,10 @@ class DailySheet {
     //////////////  TEST  //////////////////
     for (let i = 0; i < this.dailySheet.length; i++) {
       let [drv, jb] = this.dailySheet[i];
-      if (absentDrivers.some((driver) => driver === drv)) {
-        if (jb.job.startsWith("CU")) drv = `UNCOVERED (${drv})`;
-        else if (jb.job.startsWith("SP") || jb.job.startsWith("RR")) continue;
+      if (absentDrivers.some(driver => driver === drv)) {
+        if (jb.job.startsWith('CU')) drv = `UNCOVERED (${drv})`;
+        else if (jb.job.startsWith('SP') || jb.job.startsWith('RR'))
+          continue;
       }
       this.revisedDailySheet.push([drv, jb]);
     }
@@ -116,20 +121,22 @@ class DailySheet {
     console.log(`Purge DailySheet for ${this.dailySheetDateObj}:\n`);
     for (const [driv, job] of this.revisedDailySheet)
       console.log(`${driv} => ${job.start} - ${job.end}, ${job.job}`);
-    console.log("\n");
+    console.log('\n');
     //////////////  TEST  //////////////////
   }
 
   #compareFn = (a, b) => {
     // Split the time strings into hours and minutes
-    const [hourA, minA] = a[1].start.split(":");
-    const [hourB, minB] = b[1].start.split(":");
+    const [hourA, minA] = a[1].start.split(':');
+    const [hourB, minB] = b[1].start.split(':');
     // Convert hours and minutes to numbers
     const timeInMinutesA = parseInt(hourA) * 60 + parseInt(minA);
     const timeInMinutesB = parseInt(hourB) * 60 + parseInt(minB);
     // If times are equal, sort based on job i.e. SP first
-    if (timeInMinutesA === timeInMinutesB && a[1].job === "SP") return -1;
-    if (timeInMinutesA === timeInMinutesB && b[1].job === "SP") return 1;
+    if (timeInMinutesA === timeInMinutesB && a[1].job === 'SP')
+      return -1;
+    if (timeInMinutesA === timeInMinutesB && b[1].job === 'SP')
+      return 1;
     // Sort based on time in minutes
     return timeInMinutesA - timeInMinutesB;
   };
@@ -139,19 +146,20 @@ class DailySheet {
       spareDriver,
       uncvrJobObj,
       prevDaily,
-      nextDaily
+      nextDaily,
     ) {
       const [drvBefore, prevjob] = prevDaily.revisedDailySheet.find(
-        (row) => row[0] === spareDriver
+        row => row[0].includes(spareDriver),
       ) ?? [null, null];
       const [drvAfter, nextjob] = nextDaily.revisedDailySheet.find(
-        (row) => row[0] === spareDriver
+        row => row[0].includes(spareDriver),
       ) ?? [null, null];
 
       const diffBefore =
         drvBefore &&
         Math.abs(
-          (uncvrJobObj.startDate - prevjob.endDate) / DailySheet.MillisecsToMins
+          (uncvrJobObj.startDate - prevjob.endDate) /
+            DailySheet.MillisecsToMins,
         );
 
       const passOrFailBefore = !diffBefore || diffBefore >= 720;
@@ -159,7 +167,8 @@ class DailySheet {
       const diffAfter =
         drvAfter &&
         Math.abs(
-          (nextjob.startDate - uncvrJobObj.endDate) / DailySheet.MillisecsToMins
+          (nextjob.startDate - uncvrJobObj.endDate) /
+            DailySheet.MillisecsToMins,
         );
 
       const passOrFailAfter = !diffAfter || diffAfter >= 720;
@@ -168,18 +177,18 @@ class DailySheet {
         ? `${drvBefore} => ${prevjob.start} - ${prevjob.end}, ${
             prevjob.job
           } has ${diffBefore} proposed mins rest between shifts, therefore ${
-            passOrFailBefore ? "PASSES" : "FAILS"
+            passOrFailBefore ? 'PASSES' : 'FAILS'
           } the hidden 18 check.`
-        : "Driver not found";
+        : 'Driver not found';
       console.log(message1);
 
       const message2 = drvAfter
         ? `${drvAfter} => ${nextjob.start} - ${nextjob.end}, ${
             nextjob.job
           } has ${diffAfter} proposed mins rest between shifts, therefore ${
-            passOrFailAfter ? "PASSES" : "FAILS"
+            passOrFailAfter ? 'PASSES' : 'FAILS'
           } the hidden 18 check.`
-        : "Driver not found";
+        : 'Driver not found';
       console.log(message2);
 
       return passOrFailBefore && passOrFailAfter;
@@ -199,13 +208,15 @@ class DailySheet {
       const { sparesArr, uncoveredJobsArr } =
         this.#extractSparesAndUncoveredJobs();
 
-      uncoveredJobsArr.forEach((currUncoveredJob) => {
-        let [currUncoveredDriver, currUncoveredJobObj] = currUncoveredJob;
+      uncoveredJobsArr.forEach(currUncoveredJob => {
+        let [currUncoveredDriver, currUncoveredJobObj] =
+          currUncoveredJob;
 
         // find nearest spare for each uncovered job
         let nearestSpare = sparesArr.reduce(
           (nearestSpareOverall, currNearestSpare) => {
-            const [currNearestSpareDrv, currNearestSpareJob] = currNearestSpare;
+            const [currNearestSpareDrv, currNearestSpareJob] =
+              currNearestSpare;
 
             //////////////// Not yet Implemented //////////////////
             // perform hidden 18 check here, need currUncoveredJobObj and
@@ -215,10 +226,10 @@ class DailySheet {
 
             prevDS && nextDS
               ? console.log(
-                  `Performing Hidden 18 check on the ${currNearestSpareDrv}. Uncovered job is: ${currUncoveredJobObj.start} - ${currUncoveredJobObj.end} to ${currUncoveredJobObj.job}`
+                  `Performing Hidden 18 check on ${currNearestSpareDrv}. Uncovered job is: ${currUncoveredJobObj.start} - ${currUncoveredJobObj.end} to ${currUncoveredJobObj.job}`,
                 )
               : console.log(
-                  "The Dailysheets for the previous and next day are not provided, therefore, Hidden 18 check on the currNearestSpareDrv will not be performed"
+                  'The Dailysheets for the previous and next day are not provided, therefore, Hidden 18 check on the currNearestSpareDrv will not be performed',
                 );
             /*
             // this will be true, and only false if the hidden 18 check fails.
@@ -239,54 +250,54 @@ class DailySheet {
               let diff = Math.abs(
                 (currUncoveredJobObj.startDate -
                   currNearestSpareJob.startDate) /
-                  DailySheet.MillisecsToMins
+                  DailySheet.MillisecsToMins,
               );
 
               nearestSpareOverall = !(diff <= 180)
                 ? nearestSpareOverall
                 : !(prevDS && nextDS)
-                ? [diff, currNearestSpareDrv]
-                : hidden18Check(
-                    currNearestSpareDrv,
-                    currUncoveredJobObj,
-                    prevDS,
-                    nextDS
-                  )
-                ? [diff, currNearestSpareDrv]
-                : nearestSpareOverall;
+                  ? [diff, currNearestSpareDrv]
+                  : hidden18Check(
+                        currNearestSpareDrv,
+                        currUncoveredJobObj,
+                        prevDS,
+                        nextDS,
+                      )
+                    ? [diff, currNearestSpareDrv]
+                    : nearestSpareOverall;
 
               console.log(
-                `nearestSpareOverall1: ${nearestSpareOverall}, diff: ${diff}`
+                `nearestSpareOverall1: ${nearestSpareOverall}, diff: ${diff}`,
               );
             } else {
               const [diff1, driver] = nearestSpareOverall;
               const diff2 = Math.abs(
                 (currUncoveredJobObj.startDate -
                   currNearestSpareJob.startDate) /
-                  DailySheet.MillisecsToMins
+                  DailySheet.MillisecsToMins,
               );
 
               nearestSpareOverall = !(diff2 < diff1 && diff2 <= 180)
                 ? [diff1, driver]
                 : !(prevDS && nextDS)
-                ? [diff2, currNearestSpareDrv]
-                : hidden18Check(
-                    currNearestSpareDrv,
-                    currUncoveredJobObj,
-                    prevDS,
-                    nextDS
-                  )
-                ? [diff2, currNearestSpareDrv]
-                : [diff1, driver];
+                  ? [diff2, currNearestSpareDrv]
+                  : hidden18Check(
+                        currNearestSpareDrv,
+                        currUncoveredJobObj,
+                        prevDS,
+                        nextDS,
+                      )
+                    ? [diff2, currNearestSpareDrv]
+                    : [diff1, driver];
 
               console.log(
-                `nearestSpareOverall2: ${nearestSpareOverall}, diff1: ${diff1}, diff2: ${diff2}`
+                `nearestSpareOverall2: ${nearestSpareOverall}, diff1: ${diff1}, diff2: ${diff2}`,
               );
             }
 
             return nearestSpareOverall;
           },
-          null
+          null,
         );
         /*    
       nearestOverall is an array in the form [[uncoveredDriver1, diff1, nearestSpareDriver], [uncoveredDriver2, diff2, nearestSpareDriver]...[]].
@@ -296,7 +307,7 @@ class DailySheet {
       */
 
         console.log(
-          `currentUncoveredDriver: ${currUncoveredDriver} nearestSpare: ${nearestSpare}`
+          `currentUncoveredDriver: ${currUncoveredDriver} nearestSpare: ${nearestSpare}`,
         );
 
         // So long as there is a nearest spare, add it to nearestOverall
@@ -314,7 +325,7 @@ class DailySheet {
           const [, diff1] = acc;
           const [, diff2] = curr;
 
-          return diff1 < diff2 ? acc : curr;
+          return diff1 <= diff2 ? acc : curr;
         });
 
         this.#allocateSpareDriverToUncoveredJob(nearestSpareDrv);
@@ -327,26 +338,28 @@ class DailySheet {
   #extractSparesAndUncoveredJobs() {
     // filter out all rows that are not spares
     const sparesArr = this.revisedDailySheet.filter(
-      (row) => row[1].job === "SP"
+      row => row[1].job === 'SP',
     );
     // filter out all rows that are not uncovered jobs
-    const uncoveredJobsArr = this.revisedDailySheet.filter((row) =>
-      row[0].includes("UNCOVERED")
+    const uncoveredJobsArr = this.revisedDailySheet.filter(row =>
+      row[0].includes('UNCOVERED'),
     );
     return { sparesArr, uncoveredJobsArr };
   }
 
   #allocateSpareDriverToUncoveredJob([uncoveredDrv, , nearestSpDrv]) {
     this.revisedDailySheet = this.revisedDailySheet
-      .map((row) =>
-        row[0] === uncoveredDrv ? [`* ${nearestSpDrv}`, row[1]] : row
+      .map(row =>
+        row[0] === uncoveredDrv ? [`* ${nearestSpDrv}`, row[1]] : row,
       )
-      .filter((row) => row[0] !== nearestSpDrv || row[1].job !== "SP");
+      .filter(row => row[0] !== nearestSpDrv);
   }
 
   // Parse a date string of the form 'DD/MM/YYYY' to a Date object
   static parseStrToDate(dateStr) {
-    const [day, month, year] = dateStr.split("/").map((n) => parseInt(n));
+    const [day, month, year] = dateStr
+      .split('/')
+      .map(n => parseInt(n));
     return new Date(Date.UTC(year, month - 1, day));
   }
 
@@ -359,10 +372,10 @@ class DailySheet {
 
   // Convert date object to a string in the form 'DD/MM/YY'
   // const weekCommencingDateStr = Dailysheet.dateGB.format(weekCommencingDateObj);
-  static dateGB = new Intl.DateTimeFormat("en-GB", {
-    day: "numeric",
-    month: "numeric",
-    year: "2-digit",
+  static dateGB = new Intl.DateTimeFormat('en-GB', {
+    day: 'numeric',
+    month: 'numeric',
+    year: '2-digit',
   });
 }
 

@@ -141,17 +141,17 @@ class DailySheet {
     return timeInMinutesA - timeInMinutesB;
   };
 
-  allocateSpares(prevDS, nextDS) {
+  allocateSpares({ prevDS, nextDS } = {}) {
     const hidden18Check = function (
       spareDriver,
       uncvrJobObj,
       prevDaily,
       nextDaily,
     ) {
-      const [drvBefore, prevjob] = prevDaily.revisedDailySheet.find(
+      const [drvBefore, prevjob] = prevDaily?.revisedDailySheet.find(
         row => row[0].includes(spareDriver),
       ) ?? [null, null];
-      const [drvAfter, nextjob] = nextDaily.revisedDailySheet.find(
+      const [drvAfter, nextjob] = nextDaily?.revisedDailySheet.find(
         row => row[0].includes(spareDriver),
       ) ?? [null, null];
 
@@ -191,6 +191,13 @@ class DailySheet {
         : 'Driver not found';
       console.log(message2);
 
+      console.log(
+        uncvrJobObj.endDate,
+        nextjob?.startDate,
+        diffAfter,
+        passOrFailAfter,
+      );
+
       return passOrFailBefore && passOrFailAfter;
     };
 
@@ -224,7 +231,7 @@ class DailySheet {
             // for days +1 and days -1. If hidden 18 is not met, return
             // nearestSpareOverall here.
 
-            prevDS && nextDS
+            prevDS !== undefined || nextDS !== undefined
               ? console.log(
                   `Performing Hidden 18 check on ${currNearestSpareDrv}. Uncovered job is: ${currUncoveredJobObj.start} - ${currUncoveredJobObj.end} to ${currUncoveredJobObj.job}`,
                 )
@@ -255,7 +262,7 @@ class DailySheet {
 
               nearestSpareOverall = !(diff <= 180)
                 ? nearestSpareOverall
-                : !(prevDS && nextDS)
+                : !(prevDS || nextDS)
                   ? [diff, currNearestSpareDrv]
                   : hidden18Check(
                         currNearestSpareDrv,
@@ -279,7 +286,7 @@ class DailySheet {
 
               nearestSpareOverall = !(diff2 < diff1 && diff2 <= 180)
                 ? [diff1, driver]
-                : !(prevDS && nextDS)
+                : !(prevDS || nextDS)
                   ? [diff2, currNearestSpareDrv]
                   : hidden18Check(
                         currNearestSpareDrv,

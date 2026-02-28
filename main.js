@@ -1,20 +1,24 @@
-"use strict";
+'use strict';
 // import { drivers, fullRoster, weeklyLeave } from './data.js';
 ////////////////////////////// TEST //////////////////////////////////////
 ////////////////////////////// TEST //////////////////////////////////////
 
-import DailySheet from "./dailySheetClass.js";
+import DailySheet from './dailySheetClass.js';
 
 ///////////////////////////// DOM ELEMENTS /////////////////////////////
 
-const pad2digits = new Intl.NumberFormat("en-GB", {
+const pad2digits = new Intl.NumberFormat('en-GB', {
   minimumIntegerDigits: 2,
 });
 
-const datePicker = document.querySelector("#datepicker");
-const selectedDate = document.querySelector(".submit--date");
-const allocateSparesCheckBox = document.querySelector('input[type="checkbox"]');
-const dailySheetContent = document.querySelector(".dailysheet--content");
+const datePicker = document.querySelector('#datepicker');
+const selectedDate = document.querySelector('.submit--date');
+const allocateSparesCheckBox = document.querySelector(
+  'input[type="checkbox"]',
+);
+const dailySheetContent = document.querySelector(
+  '.dailysheet--content',
+);
 
 // Initialize Flatpickr
 let flatpickrInstance;
@@ -22,23 +26,25 @@ let flatpickrInstance;
 // const weeklyLeaveDate2 = document.querySelector(".weekly--leave-date--2");
 // a live HTMLCollection of all the weekly leave list elements
 // const weeklyLeaveList = document.getElementsByClassName("weekly--leave-list");
-const dailySheetDateHTML = document.querySelectorAll(".dailysheet--date");
+const dailySheetDateHTML = document.querySelectorAll(
+  '.dailysheet--date',
+);
 const dailySheetDateBeforeHTML = document.querySelector(
-  ".dailysheet--date--before",
+  '.dailysheet--date--before',
 );
 const dailySheetDateAfterHTML = document.querySelector(
-  ".dailysheet--date--after",
+  '.dailysheet--date--after',
 );
 // a live node list
 const weeklyLeaveContainer = document.getElementsByClassName(
-  "weekly--leave-container",
+  'weekly--leave-container',
 );
-const modal = document.querySelector(".modal");
-const overlay = document.querySelector(".overlay");
+const modal = document.querySelector('.modal');
+const overlay = document.querySelector('.overlay');
 const unavailableDriversHTML = [
-  document.querySelector(".unavailable--list--1"),
-  document.querySelector(".unavailable--list--2"),
-  document.querySelector(".unavailable--list--3"),
+  document.querySelector('.unavailable--list--1'),
+  document.querySelector('.unavailable--list--2'),
+  document.querySelector('.unavailable--list--3'),
 ];
 
 /////////////////////////// GLOBAL VARIABLES ///////////////////////////
@@ -73,17 +79,20 @@ const currDailySheetObj = new DailySheet();
 
 let startingUnavailableDrivers = [];
 
-for (const el of document.querySelector(".unavailable--list--1").children)
+for (const el of document.querySelector('.unavailable--list--1')
+  .children)
   startingUnavailableDrivers.push(el.textContent);
 
-console.log(`Starting unavailable drivers: ${startingUnavailableDrivers}\n`);
+console.log(
+  `Starting unavailable drivers: ${startingUnavailableDrivers}\n`,
+);
 const initialiseAllUnavailableDrivers = () => {
   // initialise unavailableDrivers arrays for all 3 days, i.e. prev, curr, next
   // this function is also called, and the three arrays reinitialised, from the
   // calculateDailySheet function whenever a new date is selected
   // from the datepicker.
 
-  if (currDailySheetObj.hasOwnProperty("unavailableDrivers")) {
+  if (currDailySheetObj.hasOwnProperty('unavailableDrivers')) {
     // if they exist on the object, clear contents of each array
 
     for (const dailySheetObj of [
@@ -91,7 +100,7 @@ const initialiseAllUnavailableDrivers = () => {
       currDailySheetObj,
       nextDailySheetObj,
     ])
-      dailySheetObj["unavailableDrivers"].length = 0;
+      dailySheetObj['unavailableDrivers'].length = 0;
   } else {
     // if this is the first time the function is called, dynamically
     // create unavailableDrivers array as a property on each object instance
@@ -101,7 +110,7 @@ const initialiseAllUnavailableDrivers = () => {
       currDailySheetObj,
       nextDailySheetObj,
     ])
-      dailySheetObj["unavailableDrivers"] = [];
+      dailySheetObj['unavailableDrivers'] = [];
   }
 
   // initialise or reinitialise unavailableDrivers arrays with
@@ -112,17 +121,17 @@ const initialiseAllUnavailableDrivers = () => {
     nextDailySheetObj,
   ]) {
     for (const driver of startingUnavailableDrivers)
-      dailySheetObj["unavailableDrivers"].push(driver);
+      dailySheetObj['unavailableDrivers'].push(driver);
   }
 
   // update the unavailable drivers on the web page
-  unavailableDriversHTML.forEach((list_element) => {
+  unavailableDriversHTML.forEach(list_element => {
     // first, clear contents
-    list_element.innerHTML = "";
+    list_element.innerHTML = '';
     // reset to the starting list of unavailable drivers on web page
     for (const driver of startingUnavailableDrivers) {
       const html = `<li class="unavailable--item">${driver}</li> `;
-      list_element.insertAdjacentHTML("beforeend", html);
+      list_element.insertAdjacentHTML('beforeend', html);
     }
   });
 };
@@ -135,7 +144,7 @@ const initialiseAllUnavailableDrivers = () => {
 // Converts a date object to a string and returns the date string in the
 // form 'YYYY-MM-DD'. This is a string format that is used to set the
 // value, min and max attributes in the html datepicker
-const parseDateObjectToString = (dateOject, seperator = "-") => {
+const parseDateObjectToString = (dateOject, seperator = '-') => {
   const yyyy = `${dateOject.getUTCFullYear()}`;
   const mm = pad2digits.format(dateOject.getUTCMonth() + 1);
   const dd = pad2digits.format(dateOject.getUTCDate());
@@ -153,42 +162,48 @@ const setUpDatePicker = (daysAhead = 1) => {
   // Initialize Flatpickr with configuration
   flatpickrInstance = flatpickr(datePicker, {
     altInput: true,
-    altFormat: "D, j M Y",
-    dateFormat: "Y-m-d",
+    altFormat: 'D, j M Y',
+    dateFormat: 'Y-m-d',
     defaultDate: minDateStr,
     minDate: minDateStr,
     maxDate: parseDateObjectToString(max),
     // Optional: Add a change event handler
     onChange: function (selectedDates, dateStr, instance) {
       // The date has been selected via flatpickr
-      console.log("Date selected:", dateStr);
+      console.log('Date selected:', dateStr);
     },
   });
 };
 
 const grabDateFromDatePicker = () => {
   const chosenDate = datePicker.value;
-  const [yyyy, mm, dd] = chosenDate.split("-");
+  const [yyyy, mm, dd] = chosenDate.split('-');
   return new Date(Date.UTC(yyyy, mm - 1, dd));
 };
 
 const updateWeeklyLeaveDisplay = () => {
   // get weekly leave list HTML elements
-  const weeklyLeaveList = document.querySelectorAll(".weekly--leave-list");
-  const weeklyLeaveDate1 = document.querySelector(".weekly--leave-date--1");
-  const weeklyLeaveDate2 = document.querySelector(".weekly--leave-date--2");
+  const weeklyLeaveList = document.querySelectorAll(
+    '.weekly--leave-list',
+  );
+  const weeklyLeaveDate1 = document.querySelector(
+    '.weekly--leave-date--1',
+  );
+  const weeklyLeaveDate2 = document.querySelector(
+    '.weekly--leave-date--2',
+  );
 
   // get current day of week
   const sunOrSat = currDailySheetObj.dailySheetDateObj.getUTCDay();
 
   // Clear all previous contents
   for (let i = 0; i < weeklyLeaveList.length; i++) {
-    weeklyLeaveList[i].innerHTML = "";
+    weeklyLeaveList[i].innerHTML = '';
   }
 
   ///////////////////////////// TEST //////////////////////////////
   const testFunction2 = () => {
-    const updateDisplay = (nestedObj) => {
+    const updateDisplay = nestedObj => {
       /*       // Clear all previous contents
       for (let i = 0; i < weeklyLeaveList.length; i++) {
         weeklyLeaveList[i].innerHTML = "";
@@ -201,7 +216,7 @@ const updateWeeklyLeaveDisplay = () => {
         const arr = obj.weeklyLeaveArr;
         for (const drv of arr) {
           const html = `<li class="weekly--leave-item">${drv}</li>`;
-          weeklyLeaveList[i].insertAdjacentHTML("beforeend", html);
+          weeklyLeaveList[i].insertAdjacentHTML('beforeend', html);
         }
       });
     };
@@ -294,18 +309,18 @@ const updateUnavailableDriversDisplay1 = () => {
   }[modalFlag];
 
   // Clear all previous contents
-  unavailableDriversHTML[i].innerHTML = "";
+  unavailableDriversHTML[i].innerHTML = '';
 
   // add new contents to the relevant unavailable drivers on web page
-  unavailableDriversArrToUpdate.forEach((drv) => {
+  unavailableDriversArrToUpdate.forEach(drv => {
     const html = `<li class="unavailable--item">${drv}</li> `;
-    unavailableDriversHTML[i].insertAdjacentHTML("beforeend", html);
+    unavailableDriversHTML[i].insertAdjacentHTML('beforeend', html);
   });
 };
 
 ////////////////////////// TEST //////////////////////////
 
-const displayDailySheet = (finalDailySheetObj) => {
+const displayDailySheet = finalDailySheetObj => {
   // Display the dailysheet date on web page (2 locations)
   // in the form 'DD/MM/YY'.
   for (const el of dailySheetDateHTML)
@@ -314,8 +329,8 @@ const displayDailySheet = (finalDailySheetObj) => {
     )}`;
 
   // remove all previous rows, but not the header
-  Array.from(dailySheetContent.children).forEach((el) => {
-    if (el.classList.contains("dailysheet--item"))
+  Array.from(dailySheetContent.children).forEach(el => {
+    if (el.classList.contains('dailysheet--item'))
       dailySheetContent.removeChild(el);
   });
 
@@ -323,11 +338,11 @@ const displayDailySheet = (finalDailySheetObj) => {
   finalDailySheetObj.revisedDailySheet.forEach(([driver, job]) => {
     const html = `
       <div class="dailysheet--item driver">${driver}</div>
-      <div class="dailysheet--item bookon">${job.start.padStart(5, "0")}</div>
-      <div class="dailysheet--item bookoff">${job.end.padStart(5, "0")}</div>
+      <div class="dailysheet--item bookon">${job.start.padStart(5, '0')}</div>
+      <div class="dailysheet--item bookoff">${job.end.padStart(5, '0')}</div>
       <div class="dailysheet--item job">${job.job}</div>
     `;
-    dailySheetContent.insertAdjacentHTML("beforeend", html);
+    dailySheetContent.insertAdjacentHTML('beforeend', html);
   });
 };
 
@@ -340,28 +355,34 @@ const displayExtraWeeklyLeaveSlide = function () {
   let slides, prevBtn, nextBtn;
 
   // Find what will be the slides container element in the DOM.
-  const slidesContainer = document.querySelector(".weekly--leave-container");
+  const slidesContainer = document.querySelector(
+    '.weekly--leave-container',
+  );
 
   // If slides container element is not found, log an error and exit.
   if (!slidesContainer) {
-    console.error("Specify a valid selector for the carousel.");
+    console.error('Specify a valid selector for the carousel.');
     return null;
   }
 
   // Add extra class to the slides container
-  slidesContainer.classList.add("slide--container--extra");
+  slidesContainer.classList.add('slide--container--extra');
 
-  prevBtn = slidesContainer.querySelector(".slider__btn--left--extra");
-  nextBtn = slidesContainer.querySelector(".slider__btn--right--extra");
+  prevBtn = slidesContainer.querySelector(
+    '.slider__btn--left--extra',
+  );
+  nextBtn = slidesContainer.querySelector(
+    '.slider__btn--right--extra',
+  );
 
   const weeklyLeaveTitleContainer1 = slidesContainer.querySelector(
-    ".weekly--leave-title-container-1",
+    '.weekly--leave-title-container-1',
   );
   const weeklyLeaveList1 = slidesContainer.querySelector(
-    ".weekly--leave-list--1",
+    '.weekly--leave-list--1',
   );
 
-  const slide2 = slidesContainer.querySelector(".slide--2--extra");
+  const slide2 = slidesContainer.querySelector('.slide--2--extra');
 
   const addElement = (tag, attributes) => {
     const element = document.createElement(tag);
@@ -379,8 +400,8 @@ const displayExtraWeeklyLeaveSlide = function () {
   const tweakStructure = () => {
     // create a new slide element for weekly leave, this will be slide 1
     // of 2.
-    const slide1 = addElement("div", {
-      class: "slide--extra slide--1--extra",
+    const slide1 = addElement('div', {
+      class: 'slide--extra slide--1--extra',
     });
     // add slide one to the slides container as the first child
     slidesContainer.prepend(slide1);
@@ -389,10 +410,10 @@ const displayExtraWeeklyLeaveSlide = function () {
     slide1.append(weeklyLeaveTitleContainer1, weeklyLeaveList1);
     // reveal slide 2 and the button elements so as to add the finishing
     // touches to create a 2 slide carousel.
-    slide2.classList.remove("weekly--leave-hidden");
-    prevBtn.classList.remove("weekly--leave-hidden");
-    nextBtn.classList.remove("weekly--leave-hidden");
-    slides = slidesContainer.querySelectorAll(".slide--extra");
+    slide2.classList.remove('weekly--leave-hidden');
+    prevBtn.classList.remove('weekly--leave-hidden');
+    nextBtn.classList.remove('weekly--leave-hidden');
+    slides = slidesContainer.querySelectorAll('.slide--extra');
     /*
      * Move slides from the carousel element to the carousel inner
      * container to facilitate alignment.
@@ -410,9 +431,9 @@ const displayExtraWeeklyLeaveSlide = function () {
   };
 
   // Move slide left and right based on direction provided.
-  const moveSlide = (direction) => {
+  const moveSlide = direction => {
     const newSlideIndex =
-      direction === "next"
+      direction === 'next'
         ? (currentSlideIndex + 1) % slides.length
         : (currentSlideIndex - 1 + slides.length) % slides.length;
     currentSlideIndex = newSlideIndex;
@@ -420,13 +441,13 @@ const displayExtraWeeklyLeaveSlide = function () {
   };
 
   // Event handlers for previous and next button clicks.
-  const handlePrevBtnClick = () => moveSlide("prev");
-  const handleNextBtnClick = () => moveSlide("next");
+  const handlePrevBtnClick = () => moveSlide('prev');
+  const handleNextBtnClick = () => moveSlide('next');
 
   // Attach event listeners to relevant elements.
   const attachEventListeners = () => {
-    prevBtn.addEventListener("click", handlePrevBtnClick);
-    nextBtn.addEventListener("click", handleNextBtnClick);
+    prevBtn.addEventListener('click', handlePrevBtnClick);
+    nextBtn.addEventListener('click', handleNextBtnClick);
   };
 
   // Initialize/create the carousel.
@@ -438,15 +459,18 @@ const displayExtraWeeklyLeaveSlide = function () {
   // Destroy the carousel/clean-up.
   const destroy = () => {
     // Remove event listeners.
-    prevBtn.removeEventListener("click", handlePrevBtnClick);
-    nextBtn.removeEventListener("click", handleNextBtnClick);
-    slidesContainer.prepend(weeklyLeaveTitleContainer1, weeklyLeaveList1);
+    prevBtn.removeEventListener('click', handlePrevBtnClick);
+    nextBtn.removeEventListener('click', handleNextBtnClick);
+    slidesContainer.prepend(
+      weeklyLeaveTitleContainer1,
+      weeklyLeaveList1,
+    );
     // weeklyLeaveTitleContainer1
-    document.querySelector(".slide--1--extra").remove();
-    prevBtn.classList.add("weekly--leave-hidden");
-    nextBtn.classList.add("weekly--leave-hidden");
-    slide2.classList.add("weekly--leave-hidden");
-    slidesContainer.classList.remove("slide--container--extra");
+    document.querySelector('.slide--1--extra').remove();
+    prevBtn.classList.add('weekly--leave-hidden');
+    nextBtn.classList.add('weekly--leave-hidden');
+    slide2.classList.add('weekly--leave-hidden');
+    slidesContainer.classList.remove('slide--container--extra');
   };
 
   // Return an object with methods to create and destroy the carousel.
@@ -487,11 +511,19 @@ const calculateDailySheet = function () {
   // if Sunday or Saturday then display extra weekly leave slide
   const sunOrSat = currDailySheetObj.dailySheetDateObj.getUTCDay();
   if (sunOrSat === 0 || sunOrSat === 6) {
-    if (weeklyLeaveContainer[0].classList.contains("slide--container--extra"))
+    if (
+      weeklyLeaveContainer[0].classList.contains(
+        'slide--container--extra',
+      )
+    )
       displayExtraWeeklyLeaveSlide().destroy();
     displayExtraWeeklyLeaveSlide().create();
   } else {
-    if (weeklyLeaveContainer[0].classList.contains("slide--container--extra"))
+    if (
+      weeklyLeaveContainer[0].classList.contains(
+        'slide--container--extra',
+      )
+    )
       displayExtraWeeklyLeaveSlide().destroy();
   }
 
@@ -555,9 +587,31 @@ const recalculateDailySheet1 = function () {
       // breaks hidden 18 in allocating spares for the current dailysheet
       // i.e. 12 hour rest periods required between allocated shifts.
       if (allocateSparesCheckBox.checked) {
+        switch (i) {
+          case 0:
+            dailySheetObj.allocateSpares({
+              nextDS: currDailySheetObj,
+            });
+            break;
+          case 1:
+            dailySheetObj.allocateSpares({
+              prevDS: currDailySheetObj,
+            });
+            break;
+          case 2:
+            dailySheetObj.allocateSpares({
+              prevDS: prevDailySheetObj,
+              nextDS: nextDailySheetObj,
+            });
+            break;
+          default:
+            console.log('Invalid daily sheet index');
+        }
+        /* 
         i === 2
           ? dailySheetObj.allocateSpares(prevDailySheetObj, nextDailySheetObj)
-          : dailySheetObj.allocateSpares();
+          : dailySheetObj.allocateSpares(); 
+        */
       }
       ///////////////////////////////////////////////
 
@@ -645,12 +699,12 @@ const editUnavailableDrivers = function (event) {
   const addOrRemove = event.target.textContent;
   // grab driver name from button depending on which driver row was clicked
   const DriverToAddOrRemove =
-    event.target.closest("li").firstElementChild.textContent;
+    event.target.closest('li').firstElementChild.textContent;
   const sunOrSat = currDailySheetObj.dailySheetDateObj.getUTCDay();
 
   ////////////////////////////// TEST START/////////////////////////////////
 
-  const addRemoveDriver = (dailySheetNestedLeaveArr) => {
+  const addRemoveDriver = dailySheetNestedLeaveArr => {
     // loop through the array of dailysheet weeklyleave or unavailabledrivers
     // arrays and add or remove driver
     for (const dailySheetLeaveArr of dailySheetNestedLeaveArr) {
@@ -658,7 +712,7 @@ const editUnavailableDrivers = function (event) {
       // array and addOrRemove is 'Add', add the driver to the corresponding
       // dailysheet object's leave array. Note, this mutates the
       // object's weeklyleave/unavailableDrivers array.
-      addOrRemove === "Add" &&
+      addOrRemove === 'Add' &&
         !dailySheetLeaveArr.includes(DriverToAddOrRemove) &&
         dailySheetLeaveArr.push(DriverToAddOrRemove);
 
@@ -668,7 +722,7 @@ const editUnavailableDrivers = function (event) {
       // object's weeklyleave/unavailableDrivers array.
 
       if (
-        addOrRemove === "Remove" &&
+        addOrRemove === 'Remove' &&
         dailySheetLeaveArr.includes(DriverToAddOrRemove)
       ) {
         // remove driver from array
@@ -702,7 +756,7 @@ const editUnavailableDrivers = function (event) {
  */
 
   // if modalFlag is 'unavailableDrivers*', edit the unavailableDrivers array
-  if (modalFlag.slice(0, -1) === "unavailableDrivers") {
+  if (modalFlag.slice(0, -1) === 'unavailableDrivers') {
     let driversObjToUpdate = {
       unavailableDrivers1: prevDailySheetObj,
       unavailableDrivers2: currDailySheetObj,
@@ -769,7 +823,7 @@ const editUnavailableDrivers = function (event) {
     updateWeeklyLeaveDisplay();
   };
 
-  if (modalFlag.slice(0, -1) === "weeklyleave") {
+  if (modalFlag.slice(0, -1) === 'weeklyleave') {
     testFunction();
   }
 
@@ -802,7 +856,8 @@ const editUnavailableDrivers = function (event) {
 
   // re-calculate daily sheet if there are more than 7 rows
   // i.e. more than just the header elements
-  if (dailySheetContent.childElementCount > 7) recalculateDailySheet1();
+  if (dailySheetContent.childElementCount > 7)
+    recalculateDailySheet1();
 };
 
 /////////////////////////// EVENT LISTENERS ///////////////////////////
@@ -811,47 +866,57 @@ setUpDatePicker();
 
 const openModal = function (e) {
   e.preventDefault();
-  modal.classList.remove("hidden");
-  overlay.classList.remove("hidden");
+  modal.classList.remove('hidden');
+  overlay.classList.remove('hidden');
 };
 
 const closeModal = function () {
-  modal.classList.add("hidden");
-  overlay.classList.add("hidden");
+  modal.classList.add('hidden');
+  overlay.classList.add('hidden');
 };
 
-document.addEventListener("click", (event) => {
+document.addEventListener('click', event => {
   // if the user clicks on the show modal button for adding or removing
   // unvailable drivers, open the modal and set modalFlag accordingly
-  if (event.target.closest('button[data-target="unavailable"]') !== null) {
-    if (event.target.closest(".slide--1")) modalFlag = "unavailableDrivers1";
-    if (event.target.closest(".slide--2")) modalFlag = "unavailableDrivers2";
-    if (event.target.closest(".slide--3")) modalFlag = "unavailableDrivers3";
+  if (
+    event.target.closest('button[data-target="unavailable"]') !== null
+  ) {
+    if (event.target.closest('.slide--1'))
+      modalFlag = 'unavailableDrivers1';
+    if (event.target.closest('.slide--2'))
+      modalFlag = 'unavailableDrivers2';
+    if (event.target.closest('.slide--3'))
+      modalFlag = 'unavailableDrivers3';
 
     openModal(event);
   }
   // if the user clicks on the show modal button for adding or removing
   // drivers on weekly leave, open the modal and set modalFlag accordingly
-  if (event.target.closest('button[data-target="weekly-leave"]') !== null) {
-    if (event.target.closest(".slide--2--extra")) modalFlag = "weeklyleave2";
-    else modalFlag = "weeklyleave1";
+  if (
+    event.target.closest('button[data-target="weekly-leave"]') !==
+    null
+  ) {
+    if (event.target.closest('.slide--2--extra'))
+      modalFlag = 'weeklyleave2';
+    else modalFlag = 'weeklyleave1';
     openModal(event);
   }
 
   // if the user clicks on the 'X' button in the modal, close the modal
-  if (event.target.closest(".close-modal")) closeModal(event);
+  if (event.target.closest('.close-modal')) closeModal(event);
 
   // if the modal is open, and the user clicks on a 'Add' or
   // 'Remove' button in the modal, edit the unavailableDrivers array
   // accordingly and display the results. Also, re-calculate the daily sheet.
   if (
-    !modal.classList.contains("hidden") &&
-    event.target.closest(".driver--list-modal button")
+    !modal.classList.contains('hidden') &&
+    event.target.closest('.driver--list-modal button')
   )
     editUnavailableDrivers(event);
 
   if (event.target === allocateSparesCheckBox) {
-    if (dailySheetContent.childElementCount > 7) recalculateDailySheet1();
+    if (dailySheetContent.childElementCount > 7)
+      recalculateDailySheet1();
     else allocateSparesCheckBox.checked = false;
   }
 
@@ -866,8 +931,8 @@ document.addEventListener("click", (event) => {
 
 // if the modal is open and the user presses the 'Escape' key,
 // also close the modal.
-document.addEventListener("keydown", function (e) {
-  if (e.key === "Escape" && !modal.classList.contains("hidden")) {
+document.addEventListener('keydown', function (e) {
+  if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
     closeModal();
   }
 });
@@ -875,9 +940,9 @@ document.addEventListener("keydown", function (e) {
 ///////////////////////////////////////
 // Slider
 const slider = function () {
-  const slides = document.querySelectorAll(".slide");
-  const btnRight = document.querySelector(".slider__btn--right");
-  const btnLeft = document.querySelector(".slider__btn--left");
+  const slides = document.querySelectorAll('.slide');
+  const btnRight = document.querySelector('.slider__btn--right');
+  const btnLeft = document.querySelector('.slider__btn--left');
 
   let curSlide = 0;
   const maxSlide = slides.length;
@@ -885,7 +950,8 @@ const slider = function () {
   // Functions
   const goToSlide = function (slide) {
     slides.forEach(
-      (s, i) => (s.style.transform = `translateX(${100 * (i - slide)}%)`),
+      (s, i) =>
+        (s.style.transform = `translateX(${100 * (i - slide)}%)`),
     );
   };
 
@@ -912,12 +978,12 @@ const slider = function () {
   init();
 
   // Event handlers
-  btnLeft.addEventListener("click", prevSlide);
-  btnRight.addEventListener("click", nextSlide);
+  btnLeft.addEventListener('click', prevSlide);
+  btnRight.addEventListener('click', nextSlide);
 
-  document.addEventListener("keydown", function (e) {
-    if (e.key === "ArrowLeft") prevSlide();
-    e.key === "ArrowRight" && nextSlide();
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'ArrowLeft') prevSlide();
+    e.key === 'ArrowRight' && nextSlide();
   });
 };
 

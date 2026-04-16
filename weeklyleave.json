@@ -6,16 +6,11 @@
   "01/02/26": ["J Bell"],
   "08/02/26": ["J Fairbank", "M Cambridge", "N Wood", "K Collier"],
   "15/02/26": ["P Streeter", "L Miller", "N Wood"],
-  "22/02/26": ["K Akers", "G Piper", "R Yates", "L Mathieson"],
+  "22/02/26": ["K Akers", "G Piper", "L Mathieson"],
   "01/03/26": ["A Reynolds", "C Fox", "L Mathieson"],
   "08/03/26": ["S Perry", "P James", "D Gibson", "D Morrish"],
   "15/03/26": ["J Potter", "J Fairbank"],
-  "22/03/26": [
-    "R Butterworth",
-    "R Gresswell",
-    "P Keegans",
-    "M Young"
-  ],
+  "22/03/26": ["R Butterworth", "R Gresswell", "P Keegans", "M Young"],
   "29/03/26": ["D Lond", "M Gale", "S Baker", "J Potter"],
   "05/04/26": ["M Sheppard", "A Gorge", "P Streeter"],
   "12/04/26": ["J Fairbank", "C Holmes", "L Miller", "D Gibson"],
@@ -32,14 +27,9 @@
   "28/06/26": ["J Bell", "D Lond", "M Howard", "M Huntley"],
   "05/07/26": ["C Holmes", "D Morrish", "L Miller", "M Young"],
   "12/07/26": ["C Holmes", "M Cambridge", "A Stringer", "K Collier"],
-  "19/07/26": ["K Akers", "R Yates", "D Edwards", "J Fairbank"],
-  "26/07/26": ["K Akers", "R Yates", "D Edwards", "P Keegans"],
-  "02/08/26": [
-    "P Keegans",
-    "N Turner",
-    "P Streeter",
-    "R Butterworth"
-  ],
+  "19/07/26": ["K Akers", "D Edwards", "J Fairbank"],
+  "26/07/26": ["K Akers", "D Edwards", "P Keegans"],
+  "02/08/26": ["P Keegans", "N Turner", "P Streeter", "R Butterworth"],
   "09/08/26": ["S Baker", "N Turner", "P Streeter", "R Butterworth"],
   "16/08/26": ["R Blacklock", "S Perry", "K Collier", "M Sheppard"],
   "23/08/26": ["R Blacklock", "S Perry", "M Gale", "M Sheppard"],
@@ -47,7 +37,7 @@
   "06/09/26": ["M Howard", "M Young", "D Gibson", "M Gale"],
   "13/09/26": ["A Gorge", "M Huntley", "K Collier", "L Mathieson"],
   "20/09/26": ["K Akers", "C Holmes", "D Edwards", "M Sheppard"],
-  "27/09/26": ["J Fairbank", "N Turner", "R Yates", "C Holmes"],
+  "27/09/26": ["J Fairbank", "N Turner", "C Holmes"],
   "04/10/26": ["M Young", "S Perry", "R Butterworth", "P James"],
   "11/10/26": ["M Huntley"],
   "18/10/26": ["C Fox", "D Lond", "A Stringer", "A Gorge"],
@@ -57,6 +47,6 @@
   "15/11/26": ["J Bell", "M Huntley", "S Baker"],
   "22/11/26": ["M Cambridge", "K Collier"],
   "29/11/26": ["K Akers", "P Streeter", "R Gresswell"],
-  "06/12/26": ["N Turner", "R Yates", "D Morrish", "J Potter"],
+  "06/12/26": ["N Turner", "D Morrish", "J Potter"],
   "13/12/26": ["M Young", "S Perry", "P Keegans", "J Potter"]
 }
